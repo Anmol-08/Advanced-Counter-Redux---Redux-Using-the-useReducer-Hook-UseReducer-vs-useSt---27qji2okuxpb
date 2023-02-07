@@ -1,23 +1,40 @@
-const initialState = {
-  counter: 0,
-  isLogged: false
-};
+const initialState={
+    counter:0,
+    islogged:false
+}
 
-const reducer = (state = initialState, action) => {
-  switch (action.type) {
-    case 'DECREMENT':
-      return { ...state, counter: state.counter - 1 };
-    case 'INCREMENT':
-      return { ...state, counter: state.counter + 1 };
-    case 'INCREMENTBYAMOUNT':
-      return { ...state, counter: state.counter + action.payload };
-    case 'SIGN_IN':
-      return { ...state, isLogged: true };
-    case 'SIGN_OUT':
-      return { ...state, isLogged: false };
-    default:
-      return state;
-  }
-};
+const reducer = (state=initialState,action)=>{
 
-export default reducer;
+    switch(action.type){
+        case 'INCREMENT': return{
+            counter:Number(state.counter)+1,
+            islogged : true
+        }
+
+        case 'DECREMENT': return{
+            counter:Number(state.counter)-1,
+            islogged : true
+        }
+
+        case 'SIGN_IN' : return{
+            counter:state.counter,
+            islogged : true
+        }
+
+        case 'SIGN_OUT' : return{
+            counter:0,
+            islogged : false
+        }
+
+        case 'INCREMENTBYAMOUNT' : return{
+            counter:Number(state.counter)+Number(action.payload),
+            islogged : true
+        }
+
+        default : return {counter:state.counter,
+            islogged : false
+        }
+    }
+}
+
+export default reducer
