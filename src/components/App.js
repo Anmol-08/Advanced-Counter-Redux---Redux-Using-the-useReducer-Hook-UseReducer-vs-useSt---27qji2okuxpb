@@ -1,43 +1,40 @@
 import React, { useState } from 'react';
-import { connect } from 'react-redux';
-import { decrement, increment, incrementByAmount, signIn, signOut } from './actions';
+import { useDispatch, useSelector } from 'react-redux';
+import { addAmount, addNumber, handlelogin, handlelogout, subNumber } from '../actions/action';
 
-const App = ({ counter, isLogged, increment, decrement, incrementByAmount, signIn, signOut }) => {
-  const [amount, setAmount] = useState(0);
+export const LoggedInFunction =()=>{
+  const dispatch=useDispatch()
+  return(
+    <div>
+      <button onClick={()=>dispatch(handlelogin())}>Login</button>
+    </div>
+  )
+}
 
-  const handleAmountChange = e => {
-    setAmount(Number(e.target.value));
-  };
+export const LoggedOutFunction=()=>{
+  const [val,setVal]=useState(2)
+  const counter=useSelector(state=>state.counter)
+  const dispatch=useDispatch()
+  return(
+    <div>
+      <div data-testid='counter'>{counter}</div>
+      <button onClick={()=>dispatch(addNumber())}>+</button>
+      <button onClick={()=>dispatch(subNumber())}>-</button>
+      <input type="number" onChange={(e)=>setVal(parseInt(e.target.value))}/>
+      <button onClick={()=>dispatch(addAmount(val))}>Add amount</button>
+      <button onClick={()=>dispatch(handlelogout())}>Logout</button>
+    </div>
+  )
+}
 
+function App() {
+  const islogged=useSelector(state=>state.islogged)
   return (
     <div id='main'>
-      {isLogged ? (
-        <div>
-          <div data-testid='counter'>{counter}</div>
-          <button onClick={decrement}>-</button>
-          <button onClick={increment}>+</button>
-          <input type='number' value={amount} onChange={handleAmountChange} />
-          <button onClick={() => incrementByAmount(amount)}>Add Amount</button>
-          <button onClick={signOut}>Logout</button>
-        </div>
-      ) : (
-        <button onClick={signIn}>Login</button>
-      )}
+
+      {islogged ? <LoggedOutFunction/> : <LoggedInFunction/>}
     </div>
   );
-};
+}
 
-const mapStateToProps = state => ({
-  counter: state.counter,
-  isLogged: state.isLogged
-});
-
-const mapDispatchToProps = {
-  decrement,
-  increment,
-  incrementByAmount,
-  signIn,
-  signOut
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default App;
